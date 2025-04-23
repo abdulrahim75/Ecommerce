@@ -1,0 +1,15 @@
+# Logs
+logs
+*.log
+
+# Node Modules
+FRONTEND/node_modules/
+BACKND/node_modules/
+
+# Environment variables
+FRONTEND/.env
+BACKND/.env
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
