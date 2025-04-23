@@ -39,22 +39,22 @@ const Footer = () => {
                 <h3 className="text-lg text-gray-800 mb-4">Shop</h3>
                 <ul className="space-y-2 text-gray-600">
                     <li>
-                        <Link to="#" className="hover:text-gray-500 transition-colors">
+                        <Link to="/collections/all?gender=Men" className="hover:text-gray-500 transition-colors">
                             Men's Top Wear
                         </Link>
                     </li>
                     <li>
-                        <Link to="#" className="hover:text-gray-500 transition-colors">
+                        <Link to="/collections/all?gender=Women" className="hover:text-gray-500 transition-colors">
                             Women's Top Wear
                         </Link>
                     </li>
                     <li>
-                        <Link to="#" className="hover:text-gray-500 transition-colors">
+                        <Link to="/collections/all?category=Top Wear" className="hover:text-gray-500 transition-colors">
                             Men's Bottom Wear
                         </Link>
                     </li>
                     <li>
-                        <Link to="#" className="hover:text-gray-500 transition-colors">
+                        <Link to="/collections/all?category=Bottom Wear" className="hover:text-gray-500 transition-colors">
                             Women's Bottom Wear
                         </Link>
                     </li>
@@ -62,38 +62,38 @@ const Footer = () => {
             </div>
 
             {/* Support Links */}
-            <div>
-                <h3 className="text-lg text-gray-800 mb-4">Support</h3>
-                <ul className="space-y-2 text-gray-600">
-                    <li>
-                        <Link to="#" className="hover:text-gray-500 transition-colors">
-                            Contact Us
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="#" className="hover:text-gray-500 transition-colors">
-                            About Us
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="#" className="hover:text-gray-500 transition-colors">
-                            FAQs
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="#" className="hover:text-gray-500 transition-colors">
-                            Features
-                        </Link>
-                    </li>
-                </ul>
-            </div>
+<div>
+  <h3 className="text-lg text-gray-800 mb-4">Support</h3>
+  <ul className="space-y-2 text-gray-600">
+    <li>
+      <Link to="/contact" className="hover:text-gray-500 transition-colors">
+        Contact Us
+      </Link>
+    </li>
+    <li>
+      <Link to="/about" className="hover:text-gray-500 transition-colors">
+        About Us
+      </Link>
+    </li>
+    <li>
+      <Link to="/faqs" className="hover:text-gray-500 transition-colors">
+        FAQs
+      </Link>
+    </li>
+    <li>
+      <Link to="/features" className="hover:text-gray-500 transition-colors">
+        Features
+      </Link>
+    </li>
+  </ul>
+</div>
 
             {/* Follow Us */}
             <div>
               <h3 className="text-lg text-gray-800 mb-4"> Follow Us</h3>
                 <div class="flex items-center space-x-4 mb-6">
                   <a 
-                        href="https://www.facebook.com"
+                        href="https://business.facebook.com/business/loginpage/?next=https%3A%2F%2Fbusiness.facebook.com%2F%3Fnav_ref%3Dbiz_unified_f3_login_page_to_mbs&login_options%5B0%5D=FB&login_options%5B1%5D=IG&login_options%5B2%5D=SSO&config_ref=biz_login_tool_flavor_mbs"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="hover:text-gray-500"
@@ -109,7 +109,7 @@ const Footer = () => {
                         <TbBrandFacebook className="h-5 w-5"/>
                     </a>
                     <a 
-                        href="https://www.facebook.com"
+                        href="https://www.instagram.com/rahxm7/"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="hover:text-gray-500"
@@ -117,7 +117,7 @@ const Footer = () => {
                         <IoLogoInstagram className="h-5 w-5"/>
                     </a>
                     <a 
-                        href="https://www.facebook.com"
+                        href="https://x.com/rahimux7"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="hover:text-gray-500"
