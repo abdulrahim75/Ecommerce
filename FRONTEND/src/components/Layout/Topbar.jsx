@@ -4,7 +4,7 @@ import { IoLogoInstagram } from "react-icons/io";
 import { RiTwitterXLine } from "react-icons/ri";
 
 const Topbar = () => {
-  return <div className="bg-slate-900 text-white">
+  return <div className="bg-green-50 text-black">
     {/* return <div className="bg-ecom-red text-white"> */}
     <div className="container mx-auto flex justify-between items-center py-3 px-4">
         <div className='hidden md:flex  items-center space-x-4'>
@@ -12,10 +12,10 @@ const Topbar = () => {
                 <TbBrandMeta className="h-5 w-5"/>
                 
             </a>
-            <a href="#" className='hover:text-gray-300'>
+            <a href="https://www.instagram.com/rahxm7/" className='hover:text-gray-300'>
                 <IoLogoInstagram className="h-5 w-5"/>
             </a>
-            <a href="#" className='hover:text-gray-300'>
+            <a href="https://x.com/rahimux7" className='hover:text-gray-300'>
                 <RiTwitterXLine className="h-4 w-4"/>
             </a>
         </div>
