@@ -27,6 +27,9 @@ import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
 import FAQs from './pages/FAQs';
 import Features from './pages/Features';
+import ForgetPassword from './pages/ForgetPassword';
+import VerifyOtp from './pages/VerifyOtp';
+
 
 const App = () => {
   return (
@@ -38,6 +41,8 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="login" element={<Login />}/>
           <Route path="register" element={<Register />}/>
+          <Route path="forget/password" element={<ForgetPassword />}/>
+          <Route path="otp/verify" element={<VerifyOtp />}/>
           <Route path="profile" element={<Profile />}/>
           <Route path="collections/:collection" element={<CollectionPage />}/>
           <Route path="product/:id" element={<ProductDetails />}/>
