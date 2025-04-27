@@ -1,5 +1,5 @@
 pipeline {
-    agent any  // This defines that the pipeline will run on any available agent.
+    agent any  // Default agent to run the pipeline on any available Jenkins node
     
     stages {
         stage('Frontend Build') {
@@ -7,15 +7,16 @@ pipeline {
                 docker { image 'mern-frontend:latest' }
             }
             steps {
-                echo 'Building the frontend inside Docker...'
+                echo 'Building frontend inside Docker container...'
             }
         }
+        
         stage('Backend Build') {
             agent {
                 docker { image 'ecommerce-backnd:latest' }
             }
             steps {
-                echo 'Building the backend inside Docker...'
+                echo 'Building backend inside Docker container...'
             }
         }
     }
