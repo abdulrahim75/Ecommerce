@@ -1,11 +1,13 @@
 pipeline {
+    agent any  // This defines that the pipeline will run on any available agent.
+    
     stages {
         stage('Frontend Build') {
             agent {
                 docker { image 'mern-frontend:latest' }
             }
             steps {
-                echo 'Building the frontend...'
+                echo 'Building the frontend inside Docker...'
             }
         }
         stage('Backend Build') {
@@ -13,7 +15,7 @@ pipeline {
                 docker { image 'ecommerce-backnd:latest' }
             }
             steps {
-                echo 'Building the backend...'
+                echo 'Building the backend inside Docker...'
             }
         }
     }
