@@ -1,14 +1,19 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:6-alpine'
-            args '-p 3000:3000'
-        }
-    }
     stages {
-        stage('Build') {
+        stage('Frontend Build') {
+            agent {
+                docker { image 'mern-frontend:latest' }
+            }
             steps {
-                sh 'npm install'
+                echo 'Building the frontend...'
+            }
+        }
+        stage('Backend Build') {
+            agent {
+                docker { image 'ecommerce-backnd:latest' }
+            }
+            steps {
+                echo 'Building the backend...'
             }
         }
     }
