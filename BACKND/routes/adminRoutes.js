@@ -17,6 +17,9 @@ router.get("/", protect, admin, async (req, res) => {
   }
 });
 
+
+// ------------------ ADD A NEW USER ------------------                               
+
 // @route   POST /api/admin/users
 // @desc    Add a new user (admin only)
 // @access  Private/Admin
@@ -46,7 +49,7 @@ router.post("/", protect, admin, async (req, res) => {
     }
   });
 
-
+// ------------------ UPDATE USER INFO ------------------
   // @route   PUT /api/admin/users/:id
 // @desc    Update user info (admin only) — name, email, and role
 // @access  Private/Admin
@@ -73,8 +76,7 @@ router.put("/:id", protect, admin, async (req, res) => {
   });
   
 
-
-
+// ------------------ DELETE A USER ------------------
   // @route   DELETE /api/admin/users/:id
 // @desc    Delete a user
 // @access  Private/Admin

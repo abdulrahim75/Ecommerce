@@ -1,5 +1,5 @@
-const express = require("express");
-const multer = require("multer");
+const express = require("express"); // Import express to create routes 
+const multer = require("multer");   // used to handle file uploads in Node.js)
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
 

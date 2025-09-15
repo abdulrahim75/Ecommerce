@@ -3,11 +3,13 @@ const Product = require("../models/Product");
 const { protect, admin } = require("../middleware/authMiddleware");
 const router = express.Router();
 
+// ------------------ CREATE PRODUCT ------------------
 // @route   POST /api/products
 // @desc    Create a new Product
-// @access  Private/Admin
+// @access  Private/Admin   ---- Only logged-in Admin can create a new product
 router.post("/", protect, admin, async (req, res) => {
   try {
+        // Pull product details from request body
     const {
       name,
       description,
@@ -29,7 +31,7 @@ router.post("/", protect, admin, async (req, res) => {
       weight,
       sku,
     } = req.body;
-
+    // Create a new product instance
     const product = new Product({
       name,
       description,
@@ -50,9 +52,9 @@ router.post("/", protect, admin, async (req, res) => {
       dimensions,
       weight,
       sku,
-      user: req.user._id,
+      user: req.user._id,       // store the admin who created it 
     });
-
+      // Save in db
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
   } catch (error) {
@@ -62,6 +64,7 @@ router.post("/", protect, admin, async (req, res) => {
 });
 
 
+// ------------------ UPDATE PRODUCT ------------------
 // @route   PUT /api/products/:id
 // @desc    Update an existing product by ID
 // @access  Private/Admin
@@ -90,7 +93,7 @@ router.put("/:id", protect, admin, async (req, res) => {
     } = req.body;
     // FInd product by id
     const product = await Product.findById(req.params.id);
-
+          // Update only if new value is provided, else keep old  
     if(product) {
       product.name = name || product.name;
       product.description = description || product.description;
@@ -128,6 +131,9 @@ router.put("/:id", protect, admin, async (req, res) => {
 
 });
 
+
+
+// ------------------ DELETE PRODUCT ------------------
 // @route DELETE /api/products/:id
 // @desc Delete a product by ID
 // @access Private/Admin
@@ -149,6 +155,7 @@ router.delete("/:id", protect, admin, async (req, res) => {
   }
 });
 
+// ------------------ GET ALL PRODUCTS ------------------
 // @route GET /api/products
 // @desc Get all products with optional query filters
 // @access Public
@@ -238,6 +245,8 @@ res.json(products);
   }
 });
 
+
+// ------------------ BEST SELLER ------------------
 // @route   GET /api/products/best-seller
 // @desc    Retrieve the product with the highest rating
 // @access  Public
@@ -256,6 +265,8 @@ router.get("/best-seller", async (req, res) => {
 });
 
 
+  // ------------------ NEW ARRIVALS ------------------
+
 // @route   GET /api/products/new-arrivals
 // @desc    Retrieve latest 8 products — Creation date
 // @access  Public
@@ -272,6 +283,7 @@ router.get("/new-arrivals", async (req, res) => {
 
 
 
+// ------------------ GET SINGLE PRODUCT ------------------
 
 // @route   GET /api/products/:id
 // @desc    Get a single product by ID
@@ -291,6 +303,8 @@ router.get("/:id", async (req, res) => {
 });
 
 
+
+// ------------------ SIMILAR PRODUCTS ------------------
 // @route   GET /api/products/similar/:id
 // @desc    Retrieve similar products based on the current product"s gender and category
 // @access  Public

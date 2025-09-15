@@ -1,14 +1,14 @@
-const express = require("express");
-const Cart = require("../models/Cart");
-const Product = require("../models/Product");
+const express = require("express");               
+const Cart = require("../models/Cart");                     
+const Product = require("../models/Product");                 
 const { protect } = require("../middleware/authMiddleware");
 
-const router = express.Router();
+const router = express.Router();              
 
 // Helper function to get a cart by userId or guestId
-const getCart = async (userId, guestId) => {
-    if (userId) {
-      return await Cart.findOne({ user: userId });
+const getCart = async (userId, guestId) => {                      
+    if (userId) {           
+      return await Cart.findOne({ user: userId });                      
     } else if (guestId) {
       return await Cart.findOne({ guestId });
     }
@@ -16,10 +16,13 @@ const getCart = async (userId, guestId) => {
   };
   
 
+// ======================================
+// 🛒 ADD ITEM TO CART
+// ======================================
 // @route   POST /api/cart
 // @desc    Add a product to the cart for a guest or logged-in user
 // @access  Public (or Protected depending on use-case)
-router.post("/", async (req, res) => {
+router.post("/", async (req, res) => {                   
   const { productId, quantity, size, color, guestId, userId } = req.body;
 
   try {
@@ -87,6 +90,10 @@ router.post("/", async (req, res) => {
   }
 });
 
+
+// ======================================
+// ✏️ UPDATE QUANTITY IN CART
+// ======================================
 // @route   PUT /api/cart
 // @desc    Update product quantity in cart
 // @access  Public
@@ -127,6 +134,9 @@ router.put("/", async (req, res) => {
 });
 
 
+// ======================================
+// ❌ REMOVE ITEM FROM CART
+// ======================================
 // @route DELETE /api/cart
 // @desc Remove a product from the cart
 // @access Public
@@ -162,6 +172,9 @@ router.delete("/", async (req, res) => {
 });
 
 
+// ======================================
+// 🛒 GET CART DETAILS
+// ======================================
 // @route GET /api/cart
 // @desc Get logged-in or guest user"s cart
 // @access Public
@@ -183,7 +196,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-
+// ======================================
+// ❌ REMOVE ITEM FROM CART
+// ======================================
+  
 // @route   POST /api/cart/merge
 // @desc    Merge guest cart into user cart on login
 // @access  Private

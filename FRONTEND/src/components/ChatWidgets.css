@@ -1,0 +1,192 @@
+/* Main container for positioning */
+.chat-widget-container {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1000;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* The floating chat button when the window is closed */
+.chat-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.chat-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+
+/* Chat window styles - appears when 'open' class is added */
+.chat-window {
+  width: 370px;
+  height: 500px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Smooth transition for opening and closing */
+  transform: scale(0.5);
+  opacity: 0;
+  transform-origin: bottom right;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.chat-widget-container.open .chat-window {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Header section */
+.chat-header {
+  background-color: #007bff;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.chat-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.close-button:hover {
+  opacity: 1;
+}
+
+/* Messages area */
+.chat-messages {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Individual message bubble styles */
+.message {
+  padding: 10px 15px;
+  border-radius: 18px;
+  max-width: 80%;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* User's message (right side) */
+.message-user {
+  background-color: #007bff;
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+/* Bot's message (left side) */
+.message-bot {
+  background-color: #e9e9eb;
+  color: #333;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+/* Input form area */
+.chat-input-container {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.message-input {
+  flex-grow: 1;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 10px 15px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.message-input:focus {
+  border-color: #007bff;
+}
+
+/* Send button */
+.send-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: #0056b3;
+}
+
+.send-button:disabled {
+  background-color: #a0c3ff;
+  cursor: not-allowed;
+}
+
+/* Just to be safe, override the chat-widget-container when open */
+.chat-widget-container.open {
+  /* This is a placeholder for the chat window that appears */
+  /* We'll rename the main window to .chat-window for clarity */
+}
+
+/* --- Final Change in ChatWidget.jsx --- */
+/* In your ChatWidget.jsx, change the main div for the open state
+   from this: <div className={`chat-widget-container ${isOpen ? 'open' : ''}`}>
+   to this: <div className="chat-widget-container">
+   
+   And change the container for the window from <> to <div className="chat-window">
+   Like this:
+
+   {isOpen ? (
+      <div className="chat-window">
+         // ... header, messages, input
+      </div>
+   ) : (
+      <button className="chat-button" onClick={toggleChat}>
+         <FaCommentDots />
+      </button>
+   )}
+*/

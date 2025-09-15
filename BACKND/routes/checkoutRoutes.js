@@ -6,6 +6,8 @@ const Product = require("../models/Product");
 const Order = require("../models/Order");
 const { protect } = require("../middleware/authMiddleware");
 
+
+// ------------------ CREATE CHECKOUT SESSION ------------------
 // @route POST /api/checkout
 // @desc Create a new checkout session
 // @access Private
@@ -55,6 +57,8 @@ router.post("/", protect, async (req, res) => {
     }
 });
 
+
+// ------------------ MARK CHECKOUT AS PAID ------------------
 // @route PUT /api/checkout/:id/pay
 // @desc Update checkout to mark as paid after successful payment
 // @access Private
@@ -85,6 +89,8 @@ router.put("/:id/pay", protect, async (req, res) => {
     }
 });
 
+
+// ------------------ FINALIZE CHECKOUT AND CREATE ORDER ------------------
 // @route POST /api/checkout/:id/finalize
 // @desc Finalize checkout and convert to an order after payment confirmation
 // @access Private

@@ -5,7 +5,7 @@ const User = require("./models/User");
 const Cart = require("./models/Cart");
 const products = require("./data/products");
 
-
+  
 // Load environment variables from .env file
 dotenv.config();
 

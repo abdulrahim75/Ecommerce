@@ -3,15 +3,18 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const {protect} = require("../middleware/authMiddleware")
 
-const router = express.Router();
+const router = express.Router();                  // Create a router object to hold all user-related routes
+
+// ---------------- REGISTER NEW USER ----------------
+
 
 // @route POST /api/users/register
 // @desc Register a new user
-// @access Public
+// @access Public   ----  Anyone can use this route (Public)
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
-
-  // Validate inputs
+                                                                                                            //async == This function will run in the background and not block other code from running
+  // Check if all fields are filled
   if (!name || !email || !password) {
     return res.status(400).json({ message: "All fields are required." });
   }
@@ -33,7 +36,7 @@ router.post("/register", async (req, res) => {
      // Save the user to the database
      await user.save();
 
-     // Send the response with user data and token
+     // Send user details + token back to frontend
      const payload = {user: {id: user._id, role: user.role} };
      jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "40h"}, (err, token) => {
       if(err) throw err;
@@ -52,6 +55,9 @@ router.post("/register", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+
+// ---------------- LOGIN USER ----------------
 
 // @route POST /api/users/login
 //@desc Authenticate user
@@ -74,10 +80,12 @@ router.post("/login", async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid Credentials" });
 
-    // Send the response with user data and token
+    // Create data for JWT token
     const payload = {user: {id: user._id, role: user.role} };
+    // Create JWT token valid for 40 hours
     jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "40h"}, (err, token) => {
      if(err) throw err;
+     // Send user details + token back to frontend
      res.json({
        user: {
          _id: user._id,
@@ -96,9 +104,12 @@ router.post("/login", async (req, res) => {
 });
 
 
+// ---------------- GET USER PROFILE ----------------
+
+
 // @route GET /api/users/profile
 // @desc Get logged-in user's profile
-// @access Private
+// @access Private  -- This route is private (only logged-in users can see it)
 router.get('/profile', protect, async (req, res) => {
   res.json(req.user);
 });

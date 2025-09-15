@@ -18,11 +18,10 @@ import UserManagement from './components/Admin/UserManagement';
 import ProductManagement from './components/Admin/ProductManagement';
 import EditProductPage from './components/Admin/EditProductPage';
 import OrderManagement from './components/Admin/OrderManagement';
-
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import ProtectedRoute from './components/Common/ProtectedRoute';
-
+import ChatWidget from './components/ChatWidgets';
 import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
 import FAQs from './pages/FAQs';
@@ -69,6 +68,7 @@ const App = () => {
           <Route path="orders" element={<OrderManagement />}/>
         </Route>
       </Routes>
+      <ChatWidget />
     </BrowserRouter>
     </Provider>
   )

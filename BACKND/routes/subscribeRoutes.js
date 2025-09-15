@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const Subscriber = require("../models/Subscriber");
+const Subscriber = require("../models/Subscriber");     // Import the Subscriber model (MongoDB schema for storing subscribers)
 
+
+// ---------- ROUTE: SUBSCRIBE TO NEWSLETTER ----------
 // @route   POST /api/subscribe
 // @desc    Handle newsletter subscription
 // @access  Public
