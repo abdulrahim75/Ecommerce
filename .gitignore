@@ -2,9 +2,13 @@
 logs
 *.log
 
-# Node Modules
-FRONTEND/node_modules/
-BACKND/node_modules/
+# # Node Modules
+# FRONTEND/node_modules/
+# BACKND/node_modules/
+
+# Dependency directories
+node_modules/   
+
 
 # Environment variables
 FRONTEND/.env

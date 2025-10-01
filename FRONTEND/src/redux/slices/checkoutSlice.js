@@ -8,7 +8,7 @@ export const createCheckout = createAsyncThunk(
     try {
       const token = localStorage.getItem("userToken"); // Fixed the missing quotes
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/checkout`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/orders/checkout`,
         checkoutData,
         {
           headers: {
@@ -16,6 +16,7 @@ export const createCheckout = createAsyncThunk(
           },
         }
       );
+      console.log("Dispatching createCheckout with data:", checkoutData);
       return response.data;
     } catch (error) {
       // Defensive error handling to ensure we always return a consistent shape

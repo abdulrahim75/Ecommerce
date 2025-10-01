@@ -30,13 +30,17 @@ export const fetchCart = createAsyncThunk(
 );
 
 // Add to cart
+// AFTER
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async ({ productId, quantity, size, color, guestId, userId }, { rejectWithValue }) => {
+  // 1. Accept the entire object as "cartItemData"
+  async (cartItemData, { rejectWithValue }) => {
+    console.log("2. [REDUX SLICE] Received data:", cartItemData);
     try {
+      // 2. Pass the entire object directly to the backend
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-        { productId, quantity, size, color, guestId, userId }
+        cartItemData
       );
       return response.data;
     } catch (error) {

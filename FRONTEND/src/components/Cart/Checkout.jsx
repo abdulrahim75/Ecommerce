@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import PayPalButton from './PayPalButton';
+// import PayPalButton from './PayPalButton';
+import RazorpayButton from '../Common/RazorpayButton';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { createCheckout } from '../../redux/slices/checkoutSlice';
@@ -10,6 +11,8 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const { cart, loading, error } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
    
   const [checkoutId, setCheckoutId] = useState(null); // Corrected variable name
   const [shippingAddress, setShippingAddress] = useState({
@@ -30,43 +33,61 @@ const Checkout = () => {
     }
   },[cart, navigate]);
 
-  const handleCreateCheckout = async (e) => {
-    e.preventDefault();
-    if (cart && cart.products.length > 0){
+ const handleCreateCheckout = async (e) => {
+  e.preventDefault();
+
+  if (isSubmitting) return; 
+  setIsSubmitting(true);    
+
+  try {
+    if (cart && cart.products.length > 0) {
       const res = await dispatch(
         createCheckout({
           checkoutItems: cart.products,
           shippingAddress,
-          paymentMethod: "Paypal",
+          paymentMethod: "Razorpay",
           totalPrice: cart.totalPrice,
+          user: user._id,
         })
       );
-      if(res.payload && res.payload._id){
-        setCheckoutId(res.payload._id); // set checkout id if successfull
+
+      if (res.payload && res.payload._id) {
+        setCheckoutId(res.payload._id);
       }
     }
-  };
+  } catch (error) {
+    console.error("Checkout creation failed:", error);
+  } finally {
+    setIsSubmitting(false); // ✅ reset after action completes
+  }
+};
+
   
 
-  const handlePaymentSuccess = async (details) => {
-    try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
-        {paymentStatus: "paid",paymentDetails: details },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-          },
-        }
-      );
-      if(response.status === 200) {
-        await handleFinalizeCheckout(checkoutId)
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    navigate("/order-confirmation");
-  };
+  // const handlePaymentSuccess = async (details) => {
+  //   try {
+  //     const response = await axios.put(
+  //       `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
+  //       {paymentStatus: "paid",paymentDetails: details },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+  //         },
+  //       }
+  //     );
+  //     if(response.status === 200) {
+  //       await handleFinalizeCheckout(checkoutId)
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   navigate("/order-confirmation");
+  // };
+  const handlePaymentSuccess = (paymentId) => {
+  console.log("Payment successfully verified! Payment ID:", paymentId);
+  // You can dispatch an action here to clear the cart if you want
+  navigate("/order-confirmation");
+};
 
   const handleFinalizeCheckout = async (checkoutId) => {
     try {
@@ -81,8 +102,8 @@ const Checkout = () => {
           },
         }
       );
-      await handleFinalizeCheckout(checkoutId);
-        navigate("/order-confirmation");
+      // await handleFinalizeCheckout(checkoutId);
+      navigate("/order-confirmation");
     } catch (error) {
       console.error(error);
     }
@@ -220,19 +241,19 @@ const Checkout = () => {
             {!checkoutId ? (
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full bg-black text-white py-3 rounded"
               >
                 Continue to Payment
               </button>
             ) : (
               <div>
-                <h3 className="text-lg mb-4">Pay with PayPal</h3>
-                {/* PayPal Component */}
-                <PayPalButton 
-                amount={cart.totalPrice}
-                onSuccess={handlePaymentSuccess}
-                onError={(err) => alert("Payment Failed. Try Agaain !")}
-                />
+                <h3 className="text-lg mb-4 text-center">Proceed to Pay</h3>
+<RazorpayButton
+  amount={cart.totalPrice}
+  dbOrderId={checkoutId}
+  onPaymentSuccess={handlePaymentSuccess}
+/>
               </div>
             )}
           </div>

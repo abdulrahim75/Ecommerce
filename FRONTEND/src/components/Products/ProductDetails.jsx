@@ -52,6 +52,8 @@ const ProductDetails = ({ productId }) => {
                 return;
             }
 
+         
+
             setIsButtonDisabled(true);
 
             dispatch(
@@ -66,6 +68,12 @@ const ProductDetails = ({ productId }) => {
             )
             .then(() => {
                 toast.success("Product added to cart!", {
+                  duration: 1000
+                });
+              })
+              .catch((e)=>{
+                console.error("Add to cart failed: ", e);
+                toast.error("Failed to add product to cart. Please try again.", {
                   duration: 1000
                 });
               })
