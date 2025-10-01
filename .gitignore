@@ -11,8 +11,9 @@ node_modules/
 
 
 # Environment variables
-FRONTEND/.env
-BACKND/.env
+# FRONTEND/.env
+# BACKND/.env
+.env
 
 # Windows system files
 Thumbs.db
