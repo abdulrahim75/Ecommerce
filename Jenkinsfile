@@ -120,7 +120,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 echo 'Deploying to Kubernetes...'
-                sh 'echo "TODO: Update deployment YAMLs with new image tag and run kubectl apply"'
+                bat 'echo "TODO: Update deployment YAMLs with new image tag and run kubectl apply"'
             }
         }
     }
