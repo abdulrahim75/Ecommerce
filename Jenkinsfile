@@ -103,15 +103,19 @@ pipeline {
             steps {
                 echo "Logging into Docker Hub..."
 
-                withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS_ID, url: 'https://index.docker.io/v1/']) {
-                    echo "Pushing Backend Image..."
-                    docker.image("${DOCKERHUB_USERNAME}/ecommerce-backend:${IMAGE_TAG}").push()
+                script {
+                    withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS_ID, url: 'https://index.docker.io/v1/']) {
 
-                    echo "Pushing Frontend Image..."
-                    docker.image("${DOCKERHUB_USERNAME}/ecommerce-frontend:${IMAGE_TAG}").push()
+                        echo "Pushing Backend Image..."
+                        docker.image("${DOCKERHUB_USERNAME}/ecommerce-backend:${IMAGE_TAG}").push()
+
+                        echo "Pushing Frontend Image..."
+                        docker.image("${DOCKERHUB_USERNAME}/ecommerce-frontend:${IMAGE_TAG}").push()
+                    }
                 }
             }
         }
+
 
         stage('Deploy to Kubernetes') {
             steps {
