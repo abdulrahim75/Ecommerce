@@ -122,7 +122,6 @@ pipeline {
             }
         }
 
-        // Blue/Green Deployment
         stage('Blue/Green Deployment') {
             steps {
                 script {
@@ -132,11 +131,12 @@ pipeline {
                     // --- 1. Determine which color is ACTIVE ---
                     echo 'Determining current active environment (Blue or Green)...'
                     
-                    // We only need to check one Service (e.g., backend) to determine the current color
-                    def activeServiceSelector = sh(
-                        script: "kubectl get svc backend-service -o jsonpath='{.spec.selector.traffic}'",
-                        returnStdout: true
-                    ).trim()
+                    // **CORRECTION for Windows:** Use bat to capture kubectl output to a temporary file
+                    bat """
+                        kubectl get svc backend-service -o jsonpath="{.spec.selector.traffic}" > active_selector.txt
+                    """
+                    // Read the content of the temporary file
+                    def activeServiceSelector = readFile('active_selector.txt').trim()
 
                     if (activeServiceSelector == 'active') {
                         env.CURRENT_ACTIVE_COLOR = 'blue'
@@ -153,14 +153,15 @@ pipeline {
                         def imageRepo = "${DOCKERHUB_USERNAME}/ecommerce-${component}"
                         echo "Updating ${TARGET_STAGING_COLOR} ${component} deployment with new image tag: ${IMAGE_TAG}"
                         
-                        // Patch the Staging Deployment to use the new image tag
-                        sh """
+                        // **CORRECTION for Windows:** Use bat
+                        bat """
                             kubectl set image deployment/${component}-${TARGET_STAGING_COLOR} ${component}=${imageRepo}:${IMAGE_TAG}
                         """
                         
                         // Wait for the Staging Deployment to be ready
                         echo "Waiting for ${TARGET_STAGING_COLOR} ${component} deployment rollout to complete..."
-                        sh "kubectl rollout status deployment/${component}-${TARGET_STAGING_COLOR} --timeout=10m"
+                        // **CORRECTION for Windows:** Use bat
+                        bat "kubectl rollout status deployment/${component}-${TARGET_STAGING_COLOR} --timeout=10m"
                     }
 
                     // --- 3. Validation/Testing Pause ---
@@ -173,11 +174,13 @@ pipeline {
                     
                     components.each { component ->
                         // 4a. Update the Staging Pods label to 'traffic: active'
-                        sh """
+                        // **CORRECTION for Windows:** Use bat
+                        bat """
                             kubectl label deployment ${component}-${TARGET_STAGING_COLOR} traffic=active --overwrite=true
                         """
                         // 4b. Remove the 'traffic: active' label from the Old (now inactive) Deployment
-                        sh """
+                        // **CORRECTION for Windows:** Use bat
+                        bat """
                             kubectl label deployment ${component}-${CURRENT_ACTIVE_COLOR} traffic=staging --overwrite=true
                         """
                     }
@@ -187,7 +190,8 @@ pipeline {
                     // --- 5. Scale Down Old Environment ---
                     echo "Scaling down old ${CURRENT_ACTIVE_COLOR} deployments..."
                     components.each { component ->
-                        sh "kubectl scale deployment ${component}-${CURRENT_ACTIVE_COLOR} --replicas=0"
+                        // **CORRECTION for Windows:** Use bat
+                        bat "kubectl scale deployment ${component}-${CURRENT_ACTIVE_COLOR} --replicas=0"
                     }
                     
                     echo "Deployment completed successfully. New version: ${IMAGE_TAG}"
