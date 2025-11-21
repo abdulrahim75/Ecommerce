@@ -7,7 +7,7 @@ logs
 # BACKND/node_modules/
 
 # Dependency directories
-node_modules/   
+node_modules/
 
 
 # Environment variables
@@ -18,3 +18,7 @@ node_modules/
 # Windows system files
 Thumbs.db
 ehthumbs.db
+
+#terraform files
+*.tfstate
+*.tfstate.backup

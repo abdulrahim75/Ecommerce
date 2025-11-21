@@ -1,4 +1,5 @@
 const express = require("express"); // For making the backend server
+const promClient = require('prom-client'); // For Prometheus metrics
 const cors = require("cors"); // To allow frontend to talk to backend
 const dotenv = require("dotenv"); // To load .env variables
 const connectDB = require("./config/db"); // Function to connect to MongoDB
@@ -34,12 +35,52 @@ app.use(cors({
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;       // Port number (from .env or 3000 if not found)
-
+// const PORT = process.env.PORT || 3000;       // Port number (from .env or 3000 if not found)
+const PORT = process.env.PORT || 5000;       // Port number (from .env or 3000 if not found)
 //Connect to Database
 connectDB();
 
 const client = new MongoClient(process.env.MONGO_URI);
+
+// --- START: PROMETHEUS & GRAFANA MONITORING SETUP ---
+
+// 2. Create a Registry to register the metrics
+const register = new promClient.Registry();
+register.setDefaultLabels({
+  app: 'ecommerce-backend'
+});
+promClient.collectDefaultMetrics({ register });
+
+// 3. Create a custom metric to count HTTP requests
+const httpRequestCounter = new promClient.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'route', 'status_code']
+});
+register.registerMetric(httpRequestCounter);
+
+// 4. Add middleware to count requests - THIS MUST BE BEFORE YOUR API ROUTES
+app.use((req, res, next) => {
+    res.on('finish', () => {
+        // Exclude the /metrics endpoint itself from being counted
+        if (req.path !== '/metrics') {
+            httpRequestCounter.inc({
+                method: req.method,
+                route: req.route ? req.route.path : req.path, // Use req.route.path if available
+                status_code: res.statusCode
+            });
+        }
+    });
+    next();
+});
+
+// 5. Add the /metrics endpoint to expose the data
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
+
+// --- END: PROMETHEUS & GRAFANA MONITORING SETUP ---
 
 // Defining a route   example
 app.get("/", (req, res) => {

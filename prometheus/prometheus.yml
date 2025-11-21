@@ -1,0 +1,11 @@
+# Ecommerce/prometheus/prometheus.yml
+
+global:
+  scrape_interval: 15s # How often to scrape metrics
+
+scrape_configs:
+  - job_name: 'ecommerce-backend'
+    static_configs:
+      # This tells Prometheus to find a container named 'ecommerce-backend-container'
+      # on the Docker network and get metrics from its port 9000.
+      - targets: ['ecommerce-backend-container:9000']
