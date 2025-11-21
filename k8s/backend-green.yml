@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-green
+spec:
+  replicas: 2
+  # CORRECTED: The selector only uses the common 'app: backend' label now
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+        version: green    # <--- Kept for tracking/debugging
+        traffic: staging  # <--- Service ignores this initially
+    spec:
+      containers:
+      - name: backend
+        image: rahimxp/ecommerce-backend:1.0 
+        ports:
+        - containerPort: 9000
+        env:
+        # (rest of your env variables and secrets)
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "9000"
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: ecommerce-secrets
+              key: MONGO_URI
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ecommerce-secrets
+              key: JWT_SECRET
